@@ -1,0 +1,53 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.p9filmshare.app'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.p9filmshare.app"
+        // P9 出厂为 Android 6.0 (API 23), 该应用必须能在其上安装运行
+        minSdk 23
+        // 29+ 走分区存储: 卓易通(安卓16内核)用 MediaStore 插图无需存储权限;
+        // P9(Android6) 仍按运行时权限走传统存储分支
+        targetSdk 30
+        versionCode 13
+        versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    signingConfigs {
+        release {
+            def localProps = new Properties()
+            def localFile = rootProject.file('local.properties')
+            if (localFile.exists()) {
+                localFile.withInputStream { localProps.load(it) }
+            }
+            storeFile rootProject.file('P9FilmShare-release.jks')
+            storePassword localProps.getProperty('P9FS_STORE_PASSWORD', '')
+            keyAlias 'p9filmshare'
+            keyPassword localProps.getProperty('P9FS_KEY_PASSWORD', '')
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+        }
+    }
+}
+
+dependencies {
+    // 仅用 ZXing core 生成/识别二维码; HTTP 服务自己实现, 不引入其它库
+    // 注意: 必须锁 3.3.3。3.4+ 的 FinderPatternFinder 内部调用 List.sort(Comparator),
+    // 该默认方法是 API 24 才有的; P9 为 API 23, 会抛 NoSuchMethodError 直接崩溃。
+    implementation 'com.google.zxing:core:3.3.3'
+    implementation 'androidx.core:core:1.8.0'
+}

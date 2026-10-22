@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>P9FilmShare · 老安卓手机 ↔ 鸿蒙 胶片传照片</title>
+<style>
+  :root{
+    --paper:#ECE3D2; --paper2:#F7F1E3; --ink:#2E2820; --muted:#8A7B66;
+    --accent:#C2702E; --accent2:#E08A3C; --border:#D8CCB4; --film:#1C1712;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--paper); color:var(--ink); line-height:1.7; -webkit-font-smoothing:antialiased}
+  .mono{font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace}
+  /* 颗粒噪点 */
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.05;z-index:0;
+    background-image:radial-gradient(#000 .5px,transparent .5px);background-size:3px 3px}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+  /* 35mm 胶片条 */
+  .strip{height:22px;background:
+    repeating-linear-gradient(90deg,var(--film) 0 11px,transparent 11px 22px),
+    var(--film);
+    -webkit-mask:repeating-linear-gradient(90deg,#000 0 11px,transparent 11px 22px),
+      linear-gradient(#000,#000);}
+  .strip{position:relative;background:var(--film)}
+  .strip::after{content:"";position:absolute;left:0;right:0;top:7px;height:8px;
+    background:repeating-linear-gradient(90deg,#ECE3D2 0 9px,transparent 9px 20px);opacity:.85}
+  header{padding:56px 0 18px;text-align:center}
+  .brand{font-family:var(--mono,monospace);font-size:13px;letter-spacing:3px;color:var(--accent);
+    text-transform:uppercase}
+  h1{font-size:54px;font-weight:800;letter-spacing:-1px;margin:10px 0 6px}
+  h1 .em{color:var(--accent)}
+  .tag{font-family:var(--mono,monospace);color:var(--muted);font-size:13px;letter-spacing:1px}
+  .lead{max-width:680px;margin:22px auto 0;color:#4a4236;font-size:16px}
+  .cta{margin:26px 0 6px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-block;padding:11px 20px;border-radius:9px;font-family:var(--mono,monospace);
+    font-size:14px;text-decoration:none;border:1.5px solid var(--border)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.ghost{background:var(--paper2);color:var(--ink)}
+  section{padding:34px 0}
+  h2{font-size:24px;margin-bottom:6px}
+  h2 .k{font-family:var(--mono,monospace);color:var(--accent);font-size:14px;margin-right:8px}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .card{background:var(--paper2);border:1px solid var(--border);border-radius:12px;padding:16px 16px}
+  .card .ic{font-size:22px}
+  .card h3{font-size:16px;margin:8px 0 4px}
+  .card p{font-size:13.5px;color:#5a513f}
+  /* 架构 */
+  .flow{display:flex;flex-direction:column;gap:0;background:var(--paper2);border:1px solid var(--border);
+    border-radius:12px;padding:18px}
+  .node{display:flex;gap:14px;align-items:flex-start;padding:12px 6px}
+  .node .dot{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-family:var(--mono,monospace);flex:0 0 auto}
+  .node .b{flex:1}
+  .node .b b{display:block;font-size:15px}
+  .node .b span{font-size:13.5px;color:#5a513f}
+  .arrow{text-align:center;color:var(--accent);font-size:20px;margin:-4px 0}
+  pre{background:var(--film);color:#EFE6D6;border-radius:10px;padding:16px;overflow:auto;
+    font-family:var(--mono,monospace);font-size:13px;line-height:1.6}
+  pre .c{color:#9C8C76}
+  .repo{background:var(--paper2);border:1px solid var(--border);border-radius:12px;padding:18px;
+    display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .repo .av{width:54px;height:54px;border-radius:12px;background:var(--film);color:var(--accent2);
+    display:flex;align-items:center;justify-content:center;font-size:26px;flex:0 0 auto}
+  .repo .meta b{font-size:17px}
+  .repo .meta p{font-size:13px;color:var(--muted)}
+  .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .badge{font-family:var(--mono,monospace);font-size:12px;background:#fff;border:1px solid var(--border);
+    border-radius:6px;padding:3px 8px;color:#5a513f}
+  footer{padding:30px 0 50px;text-align:center;color:var(--muted);font-size:13px}
+  a.lk{color:var(--accent)}
+  @media(max-width:560px){h1{font-size:38px}}
+</style>
+</head>
+<body>
+
+<div class="strip"></div>
+
+<header>
+  <div class="wrap">
+    <div class="brand">· FILM TRANSFER BRIDGE ·</div>
+    <h1>P9Film<span class="em">Share</span></h1>
+    <div class="tag">老安卓手机  ⇄  鸿蒙 / 卓易通  ·  胶片传照片</div>
+    <p class="lead">一个 APK 同时充当发送端与接收端，让华为 P9（EMUI 4 / Android 6）以近乎“华为分享”的体验，
+      向鸿蒙设备批量传照片——<b>免流量、免账号、不依赖厂商私有协议</b>。</p>
+    <div class="cta">
+      <a class="btn primary" href="#build">查看构建</a>
+      <a class="btn ghost" href="#arch">工作原理</a>
+    </div>
+  </div>
+</header>
+
+<div class="strip"></div>
+
+<section>
+  <div class="wrap">
+    <h2><span class="k">// 01</span>特性</h2>
+    <div class="sub">胶片照片风格的轻量桥接工具</div>
+    <div class="grid">
+      <div class="card"><div class="ic">🎞️</div><h3>胶片照片 UI</h3><p>35mm 齿孔胶片条、暖色相纸配色、颗粒噪点、等宽“胶片盒标签”。</p></div>
+      <div class="card"><div class="ic">🌗</div><h3>深色 / 浅色</h3><p>浅色 / 深色 / 跟随系统三档，首页一键切换，全局统一套用。</p></div>
+      <div class="card"><div class="ic">📷</div><h3>扫码即连</h3><p>扫鸿蒙端二维码 → 自动解析凭据 → 自动连个人热点。</p></div>
+      <div class="card"><div class="ic">🗂️</div><h3>相册批量选</h3><p>缩略图网格多选，按文件夹过滤、全选/清空、已传标记。</p></div>
+      <div class="card"><div class="ic">🕘</div><h3>历史一键连</h3><p>记住连接配置，热点开着或同 Wi‑Fi 时点一下即重连。</p></div>
+      <div class="card"><div class="ic">🔁</div><h3>重复处理</h3><p>覆盖 / 复制为新文件 / 跳过，逐张或批量决定。</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="strip"></div>
+
+<section id="arch">
+  <div class="wrap">
+    <h2><span class="k">// 02</span>工作原理</h2>
+    <div class="sub">鸿蒙端当“热点主机 + 上传接收端”，老手机当“客户端 + 上传者”</div>
+    <div class="flow">
+      <div class="node"><div class="dot">1</div><div class="b"><b>鸿蒙设备（卓易通内运行）</b>
+        <span>开个人热点（SSID/密码可改）→ 起前台 HTTP 上传服务（8421）→ 生成二维码 P9SHARE2|ssid|pass|ip|port|token</span></div></div>
+      <div class="arrow">↓</div>
+      <div class="node"><div class="dot">2</div><div class="b"><b>老安卓手机 扫码</b>
+        <span>相机扫二维码 → 自动连上热点（addNetwork + enableNetwork）→ 弹出相册批量勾选</span></div></div>
+      <div class="arrow">↓</div>
+      <div class="node"><div class="dot">3</div><div class="b"><b>逐张上传</b>
+        <span>P9Client 用 HTTP POST 原图字节传到鸿蒙端；增量传输：已传过的默认不再传</span></div></div>
+      <div class="arrow">↓</div>
+      <div class="node"><div class="dot">4</div><div class="b"><b>落盘图库</b>
+        <span>鸿蒙端写入系统图库「华为分享」相册；卓易通“文件互通”可直达宿主图库。重复照片弹「覆盖/复制/跳过」</span></div></div>
+    </div>
+    <p class="sub" style="margin-top:14px">设计要点：不用 Wi‑Fi 直连（EMUI 4 上 createGroup 必返 BUSY）；所有请求都是出站，天然穿透卓易通 NAT。</p>
+  </div>
+</section>
+
+<div class="strip"></div>
+
+<section id="build">
+  <div class="wrap">
+    <h2><span class="k">// 03</span>构建</h2>
+    <div class="sub">标准 Android Gradle 工程 · 仅依赖 ZXing core，无其他第三方库</div>
+<pre><span class="c"># 克隆后构建 debug 包</span>
+git clone &lt;your-fork-url&gt; P9FilmShare
+cd P9FilmShare
+./gradlew assembleDebug          <span class="c"># Windows: gradlew.bat assembleDebug</span>
+
+<span class="c"># 产物</span>
+app/build/outputs/apk/debug/app-debug.apk
+
+<span class="c"># 配置：AGP 7.4.2 / compileSdk 33 / minSdk 23 / targetSdk 30</span>
+<span class="c"># 依赖：com.google.zxing:core:3.3.3（务必锁 3.3.3，见 README 兼容性说明）</span></pre>
+  </div>
+</section>
+
+<div class="strip"></div>
+
+<section>
+  <div class="wrap">
+    <h2><span class="k">// 04</span>开源仓库</h2>
+    <div class="sub">脱敏后的开源版本（包名 com.p9filmshare.app，无内部路径/凭据）</div>
+    <div class="repo">
+      <div class="av">🎞️</div>
+      <div class="meta">
+        <b>P9FilmShare</b>
+        <p>让老安卓手机经热点桥接给鸿蒙/卓易通设备传照片 · MIT License</p>
+        <div class="badges">
+          <span class="badge">Java</span>
+          <span class="badge">Android minSdk 23</span>
+          <span class="badge">ZXing 3.3.3</span>
+          <span class="badge">No GMS</span>
+          <span class="badge">MIT</span>
+        </div>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:16px">
+      仓库结构、使用流程、兼容性说明（ZXing 锁版原因、Wi‑Fi 直连不可用、卓易通 NAT 注意）详见
+      <a class="lk" href="#build">README</a>。本页为开源发布前的预览，确认无误后即可推送到 GitHub。
+    </p>
+  </div>
+</section>
+
+<div class="strip"></div>
+
+<footer>
+  <div class="wrap">
+    P9FilmShare · 兼容桥接工具（不含、不逆向任何厂商私有分享协议） · MIT © P9FilmShare Contributors
+  </div>
+</footer>
+
+</body>
+</html>

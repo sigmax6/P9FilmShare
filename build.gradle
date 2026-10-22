@@ -1,0 +1,4 @@
+// Top-level build file — Android Studio + AGP 7.4.x (兼容老环境, 也可用 8.x)
+plugins {
+    id 'com.android.application' version '7.4.2' apply false
+}
