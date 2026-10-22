@@ -7,6 +7,33 @@
 
 ---
 
+## 📥 下载与安装（先从这里开始）
+
+**最新稳定版：`v1.0`**（已签名发布版，下载后直接安装即可使用）
+
+| 平台 | 下载地址 |
+| --- | --- |
+| **Gitee 发行版**（国内更快） | [P9FilmShare-v1.0-release.apk](https://gitee.com/sigmav/p9-film-share/releases/download/v1.0/P9FilmShare-v1.0-release.apk) |
+| **GitHub Release** | [P9FilmShare-v1.0-release.apk](https://github.com/sigmax6/P9FilmShare/releases/download/v1.0/P9FilmShare-v1.0-release.apk) |
+
+> 如果直链不便，也可进仓库的「发行版 / Releases」页面手动下载：
+> Gitee → https://gitee.com/sigmav/p9-film-share/releases ｜ GitHub → https://github.com/sigmax6/P9FilmShare/releases
+
+### 安装指引
+
+**老安卓手机（发送端 · 如华为 P9 / EMUI 4 / Android 6）**
+1. 把下载好的 `P9FilmShare-v1.0-release.apk` 传到手机（数据线、微信文件传输、网盘均可）。
+2. 用文件管理器点击 APK → 若提示「禁止安装未知应用」，按系统引导**开启「允许来自此来源」**，再点安装。
+3. 安装完成打开，选「我要发送」，授予相机与存储权限即可。
+
+**鸿蒙设备（接收端 · HarmonyOS，经官方「卓易通」运行）**
+1. 打开官方「卓易通」→「本地安装包」导入并安装该 APK。
+2. 打开后选「我要接收」，按提示开个人热点、生成二维码等待扫码。
+
+> ⚠️ 本应用为**全新包名 `com.p9filmshare.app`**：若之前装过旧开发预览版（旧包名），请先卸载旧版再装，否则无法覆盖安装。
+
+---
+
 ## 它是怎么工作的
 
 ```
