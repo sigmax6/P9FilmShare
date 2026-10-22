@@ -38,3 +38,6 @@ captures/
 # Keystore files
 *.jks
 *.keystore
+
+# local ssh known_hosts (not committed)
+.ssh_known_hosts

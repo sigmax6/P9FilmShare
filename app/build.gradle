@@ -42,6 +42,11 @@ android {
             minifyEnabled false
         }
     }
+
+    lint {
+        // 本项目为开源侧载分发（不上 Google Play），关闭 release 构建的 targetSdk 过期强制检查
+        checkReleaseBuilds false
+    }
 }
 
 dependencies {
